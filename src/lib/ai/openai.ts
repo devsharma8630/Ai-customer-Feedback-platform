@@ -1,9 +1,21 @@
 import OpenAI from "openai";
 import type { AIAnalysisResult } from "@/types/database.types";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// OpenRouter exposes an OpenAI-compatible API, so the same SDK works —
+// just point it at OpenRouter's base URL and use an OpenRouter model slug.
+const openai = new OpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: "https://openrouter.ai/api/v1",
+  defaultHeaders: {
+    // Optional but recommended by OpenRouter for analytics/rate-limit attribution.
+    "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    "X-Title": "Loop",
+  },
+});
 
-const ANALYSIS_MODEL = "gpt-4o-mini";
+// Any OpenRouter-supported model slug works here, e.g.:
+// "openai/gpt-4o-mini", "anthropic/claude-3.5-haiku", "google/gemini-2.0-flash-001", "meta-llama/llama-3.3-70b-instruct"
+const ANALYSIS_MODEL = "openai/gpt-4o-mini";
 
 const ANALYSIS_SCHEMA_PROMPT = `You are the AI analysis engine for Project Loop, a customer feedback intelligence platform.
 Analyze the customer feedback and return ONLY a raw JSON object (no markdown fences, no preamble) matching exactly this shape:
