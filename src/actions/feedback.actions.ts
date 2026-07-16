@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { analyzeFeedback, suggestReply } from "@/lib/ai/openai";
-import { sendReplyEmail } from "@/lib/email/resend";
+import { sendReplyEmail } from "@/lib/email/emailjs";
 import { getCurrentProfile } from "@/lib/auth/get-current-profile";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
